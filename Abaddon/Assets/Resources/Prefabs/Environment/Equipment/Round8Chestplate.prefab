@@ -135,7 +135,7 @@ MonoBehaviour:
   equipmentType: Body
   amountInStack: 1
   maxStackSize: 1
-  ItemID: 25
+  ItemID: 35
   itemSprite: {fileID: 21300000, guid: 8e486a1e23772e25c97dea12be7c2bfa, type: 3}
   useOutline: 0
   close: 0

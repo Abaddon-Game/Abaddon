@@ -67,6 +67,16 @@ public class BaseAttack : MonoBehaviour
         Controller.main.DamagePlayer(damage);
     }
 
+    public virtual string ExtraSaveInfo()
+    {
+        return "{}";
+    }
+
+    public virtual void LoadSaveInfo(string payload)
+    {
+        return;
+    }
+
     public virtual string GetAttackAnimationName()
     {
         return "attack";

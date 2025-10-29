@@ -135,7 +135,7 @@ MonoBehaviour:
   equipmentType: Legs
   amountInStack: 1
   maxStackSize: 1
-  ItemID: 8
+  ItemID: 42
   itemSprite: {fileID: 21300000, guid: 9c0676dca8584664b8d7666f225667fb, type: 3}
   useOutline: 0
   close: 0

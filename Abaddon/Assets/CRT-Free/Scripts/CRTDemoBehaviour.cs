@@ -5,93 +5,94 @@ using UnityEngine;
 
 namespace BrewedInk.CRT
 {
-	public class CRTDemoBehaviour : MonoBehaviour
-	{
-		[Header("Scene References")]
-		public CRTCameraBehaviour crtCamera;
-		public List<Transform> spin;
-		
-		[Header("Asset References")]
-		public CRTDataObject[] demoValues;
-		
-		[Header("Runtime data")]
-		public int currentDemoIndex;
+    public class CRTDemoBehaviour : MonoBehaviour
+    {
+        [Header("Scene References")]
+        public CRTCameraBehaviour crtCamera;
+        public List<Transform> spin;
 
-		[ContextMenu("Next Demo")]
-		public void GotoNextDemo()
-		{
-			var curr = demoValues[currentDemoIndex];
-			currentDemoIndex = (currentDemoIndex + 1) % demoValues.Length;
-			var next = demoValues[currentDemoIndex];
-			
-			float duration = 1;
-			IEnumerator Animation()
-			{
-				crtCamera.data = curr.data;
-				var startTime = Time.realtimeSinceStartup;
-				var endTime = startTime + duration;
+        [Header("Asset References")]
+        public CRTDataObject[] demoValues;
 
-				while (Time.realtimeSinceStartup < endTime)
-				{
-					var t = 1 - ((endTime - Time.realtimeSinceStartup) / duration);
-					var x = CRTData.Lerp(curr.data, next.data, t);
-					crtCamera.data = x;
-					yield return null;
-				}
+        [Header("Runtime data")]
+        public int currentDemoIndex;
 
-				crtCamera.data = next.data;
-			}
-			StartCoroutine(Animation());
-		}
-		
-		[ContextMenu("Zoom in!")]
-		public void ZoomIn()
-		{
+        [ContextMenu("Next Demo")]
+        public void GotoNextDemo()
+        {
+            var curr = demoValues[currentDemoIndex];
+            currentDemoIndex = (currentDemoIndex + 1) % demoValues.Length;
+            var next = demoValues[currentDemoIndex];
 
-			float duration = 2;
-			float startZoom = 2;
-			float endZoom = 1.1f;
-			IEnumerator Animation()
-			{
-				crtCamera.data.zoom = startZoom;
-				var startTime = Time.realtimeSinceStartup;
-				var endTime = startTime + duration;
+            float duration = 1;
+            IEnumerator Animation()
+            {
+                crtCamera.data = curr.data;
+                var startTime = Time.realtimeSinceStartup;
+                var endTime = startTime + duration;
 
-				while (Time.realtimeSinceStartup < endTime)
-				{
-					var t = 1 - ((endTime - Time.realtimeSinceStartup) / duration);
-					var x = Mathf.Lerp(startZoom, endZoom, t);
-					crtCamera.data.zoom = x;
-					yield return null;
-				}
+                while (Time.realtimeSinceStartup < endTime)
+                {
+                    var t = 1 - ((endTime - Time.realtimeSinceStartup) / duration);
+                    var x = CRTData.Lerp(curr.data, next.data, t);
+                    crtCamera.data = x;
+                    yield return null;
+                }
 
-				crtCamera.data.zoom = endZoom;
-			}
-			StartCoroutine(Animation());
-		}
+                crtCamera.data = next.data;
+            }
+            StartCoroutine(Animation());
+        }
 
-		private void Start()
-		{
-			if (crtCamera == null)
-			{
-				Debug.LogWarning($"The {nameof(crtCamera)} field hasn't been assigned! Null references will likely abound in short order... :(" );
-			}
-			ZoomIn();
-		}
+        [ContextMenu("Zoom in!")]
+        public void ZoomIn()
+        {
+            float duration = 2;
+            float startZoom = 2;
+            float endZoom = 1.1f;
+            IEnumerator Animation()
+            {
+                crtCamera.data.zoom = startZoom;
+                var startTime = Time.realtimeSinceStartup;
+                var endTime = startTime + duration;
 
-		private void Update()
-		{
-			if (Input.GetKeyDown(KeyCode.Space))
-			{
-				GotoNextDemo();
-			}
+                while (Time.realtimeSinceStartup < endTime)
+                {
+                    var t = 1 - ((endTime - Time.realtimeSinceStartup) / duration);
+                    var x = Mathf.Lerp(startZoom, endZoom, t);
+                    crtCamera.data.zoom = x;
+                    yield return null;
+                }
 
-			foreach (var s in spin)
-			{
-				s.Rotate(10 * Time.deltaTime, 0, 0, Space.Self);
-				// var curr = s.localRotation.eulerAngles;
-				// s.localRotation = Quaternion.Euler(curr.x + 10 * Time.deltaTime, curr.y, curr.z);
-			}
-		}
-	}
+                crtCamera.data.zoom = endZoom;
+            }
+            StartCoroutine(Animation());
+        }
+
+        private void Start()
+        {
+            if (crtCamera == null)
+            {
+                Debug.LogWarning(
+                    $"The {nameof(crtCamera)} field hasn't been assigned! Null references will likely abound in short order... :("
+                );
+            }
+            ZoomIn();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                GotoNextDemo();
+            }
+
+            foreach (var s in spin)
+            {
+                s.Rotate(10 * Time.deltaTime, 0, 0, Space.Self);
+                // var curr = s.localRotation.eulerAngles;
+                // s.localRotation = Quaternion.Euler(curr.x + 10 * Time.deltaTime, curr.y, curr.z);
+            }
+        }
+    }
 }

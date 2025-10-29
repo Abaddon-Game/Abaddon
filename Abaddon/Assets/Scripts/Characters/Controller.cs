@@ -15,7 +15,7 @@ using UnityEngine.UI;
     RequireComponent(typeof(Inventory)),
     RequireComponent(typeof(BoxCollider2D))
 ]
-public class Controller : MonoBehaviour
+public class Controller : MonoBehaviour, ISaver
 {
     #region Variables
     public static Controller main;
@@ -658,42 +658,46 @@ public class Controller : MonoBehaviour
         HealPlayer(0);
     }
 
-    public void UpdateConstitutionModifier(int conDiff)
+    public void UpdateConstitutionModifier(int conDiff, bool addText)
     {
         if (conDiff == 0)
             return;
         conModifier += conDiff;
         TextTypes type = conDiff < 0 ? TextTypes.StatLoss : TextTypes.StatGain;
-        AddTextToQueue($"{conDiff} CON", type);
+        if (addText)
+            AddTextToQueue($"{conDiff} CON", type);
     }
 
-    public void UpdateDexterityModifier(int dexDiff)
+    public void UpdateDexterityModifier(int dexDiff, bool addText)
     {
         if (dexDiff == 0)
             return;
         dexModifier += dexDiff;
         TextTypes type = dexDiff < 0 ? TextTypes.StatLoss : TextTypes.StatGain;
-        AddTextToQueue($"{dexDiff} DEX", type);
+        if (addText)
+            AddTextToQueue($"{dexDiff} DEX", type);
         // No need to update anything else, since dexterity is only used for dodge chance
     }
 
-    public void UpdateStrengthModifier(int strDiff)
+    public void UpdateStrengthModifier(int strDiff, bool addText)
     {
         if (strDiff == 0)
             return;
         strModifier += strDiff;
         TextTypes type = strDiff < 0 ? TextTypes.StatLoss : TextTypes.StatGain;
-        AddTextToQueue($"{strDiff} STR", type);
+        if (addText)
+            AddTextToQueue($"{strDiff} STR", type);
         // No need to update anything else, since strength is only used for damage
     }
 
-    public void UpdateWisdomModifier(int wisDiff)
+    public void UpdateWisdomModifier(int wisDiff, bool addText)
     {
         if (wisDiff == 0)
             return;
         wisModifier += wisDiff;
         TextTypes type = wisDiff < 0 ? TextTypes.StatLoss : TextTypes.StatGain;
-        AddTextToQueue($"{wisDiff} WIS", type);
+        if (addText)
+            AddTextToQueue($"{wisDiff} WIS", type);
         // No need to update anything else, since wisdom is only used for ability damage
     }
 
@@ -954,7 +958,7 @@ public class Controller : MonoBehaviour
             return "Right";
         }
 
-        throw new Exception("Invalid direction");
+        throw new Exception("Invalid direction " + direction);
     }
 
     public string currentAnimation = "";
@@ -1088,9 +1092,68 @@ public class Controller : MonoBehaviour
     {
         return quest_state;
     }
+
+    public SaveableObjectID GetID()
+    {
+        return SaveableObjectID.Player;
+    }
+
+    public string ToJson(bool pretty)
+    {
+        PlayerJsonData data = new()
+        {
+            Position = transform.position,
+            Direction = current_player_direction,
+            Health = health,
+            GoldCount = goldCount,
+            Strength = strength,
+            Wisdom = wisdom,
+            Constitution = constitution,
+            Dexterity = dexterity,
+        };
+
+        Debug.Log(data.Direction);
+
+        var o = JsonUtility.ToJson(data, pretty);
+
+        Debug.Log(o);
+
+        return o;
+    }
+
+    public void LoadFromPayload(string payload)
+    {
+        Debug.Log(payload);
+        PlayerJsonData data = JsonUtility.FromJson<PlayerJsonData>(payload);
+
+        Debug.Log(data.Direction);
+
+        this.transform.position = data.Position;
+        current_player_direction = data.Direction;
+        PlayAnimation("Idle", current_player_direction);
+        this.health = data.Health;
+        this.goldCount = data.GoldCount;
+        this.strength = data.Strength;
+        this.wisdom = data.Wisdom;
+        this.constitution = data.Constitution;
+        this.dexterity = data.Dexterity;
+    }
 }
 
-// we boldly go where no man has gone before
-// not because it is difficult, but because it is easy
-// and we are lazy
+[System.Serializable]
+struct PlayerJsonData
+{
+    public Vector3 Position;
+    public Vector2 Direction;
+    public int Health;
+    public int GoldCount;
+
+    public int Strength;
+    public int Constitution;
+    public int Wisdom;
+    public int Dexterity;
+}
+
+// we boldly go where many men have gone before.
+// not because it is difficult, but because it is easy.
 // 1000 lines hell yeah

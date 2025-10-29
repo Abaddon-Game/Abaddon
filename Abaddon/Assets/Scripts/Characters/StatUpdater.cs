@@ -36,16 +36,16 @@ public class StatUpdater : MonoBehaviour
         switch (stat)
         {
             case Stat.Wisdom:
-                Controller.main.UpdateWisdomModifier(amount);
+                Controller.main.UpdateWisdomModifier(amount, true);
                 break;
             case Stat.Strength:
-                Controller.main.UpdateStrengthModifier(amount);
+                Controller.main.UpdateStrengthModifier(amount, true);
                 break;
             case Stat.Dexterity:
-                Controller.main.UpdateDexterityModifier(amount);
+                Controller.main.UpdateDexterityModifier(amount, true);
                 break;
             case Stat.Constitution:
-                Controller.main.UpdateConstitutionModifier(amount);
+                Controller.main.UpdateConstitutionModifier(amount, true);
                 break;
         }
     }

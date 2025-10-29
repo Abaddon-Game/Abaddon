@@ -9,8 +9,8 @@ public class WeepingEyeAttack : BaseAttack
 
     public enum AttackStage
     {
-        WindUp,
-        Attack,
+        WindUp = 0,
+        Attack = 1,
     }
 
     [HideInInspector]
@@ -117,5 +117,15 @@ public class WeepingEyeAttack : BaseAttack
             default:
                 return "idle";
         }
+    }
+
+    public virtual string ExtraSaveInfo()
+    {
+        return "{}";
+    }
+
+    public virtual void LoadSaveInfo(string payload)
+    {
+        return;
     }
 }

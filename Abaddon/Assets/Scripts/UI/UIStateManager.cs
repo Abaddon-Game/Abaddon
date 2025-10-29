@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -68,6 +69,9 @@ public class UIStateManager : MonoBehaviour
     [SerializeField]
     string MainMenuScene = "Main Menu";
 
+    [SerializeField]
+    string SaveFileName = "abaddon_save_data.json";
+
     private float _darkenerOpacity = 1;
     public float darkenerOpacity
     {
@@ -92,6 +96,11 @@ public class UIStateManager : MonoBehaviour
     private void Awake()
     {
         singleton = this;
+    }
+
+    private void Start()
+    {
+        LoadFromFile();
     }
 
     private void Update()
@@ -239,5 +248,64 @@ public class UIStateManager : MonoBehaviour
     {
         CloseOpenUIPages();
         OpenUIPage(UIState.Settings);
+    }
+
+    public void SaveToFile()
+    {
+        string path = Path.Join(Application.persistentDataPath, SaveFileName);
+        SaveToFile(path);
+    }
+
+    public void SaveToFile(string path)
+    {
+        // TODO: prevent saving while not players turn (so we don't have to worry about weird shenanigans)
+
+        Debug.Log("Saving to: " + path + "...");
+
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+            string data = Serializer.Serialize(true);
+
+            using FileStream stream = new(path, FileMode.Create);
+            using StreamWriter writer = new(stream);
+            writer.Write(data);
+        }
+        catch (Exception E)
+        {
+            Debug.LogError("Error occured while trying to save file: " + path + '\n' + E);
+        }
+
+        Debug.Log("Done saving!");
+    }
+
+    public bool LoadFromFile()
+    {
+        string path = Path.Join(Application.persistentDataPath, SaveFileName);
+        return LoadFromFile(path);
+    }
+
+    public bool LoadFromFile(string path)
+    {
+        if (!File.Exists(path))
+        {
+            return false;
+        }
+
+        try
+        {
+            using FileStream stream = new(path, FileMode.Open);
+            using StreamReader reader = new(stream);
+            string data = reader.ReadToEnd();
+            Serializer.Deserialize(data);
+        }
+        catch (Exception E)
+        {
+            Debug.LogError("Could not read file: " + path + '\n' + E);
+            return false;
+        }
+
+        return true;
     }
 }

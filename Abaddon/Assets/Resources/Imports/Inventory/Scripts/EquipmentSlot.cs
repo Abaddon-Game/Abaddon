@@ -79,6 +79,11 @@ public class EquipmentSlot : MonoBehaviour
         return curItem.ItemID;
     }
 
+    public void _SetStats(StatModifier slotModifier)
+    {
+        stats = slotModifier;
+    }
+
     public void Equip()
     {
         if (Controller.main == null)
@@ -92,10 +97,10 @@ public class EquipmentSlot : MonoBehaviour
             {
                 stats = slotModifier;
                 Debug.Log($"Equipping item with stats: {stats}");
-                Controller.main.UpdateConstitutionModifier(stats.constitution);
-                Controller.main.UpdateDexterityModifier(stats.dexterity);
-                Controller.main.UpdateStrengthModifier(stats.strength);
-                Controller.main.UpdateWisdomModifier(stats.wisdom);
+                Controller.main.UpdateConstitutionModifier(stats.constitution, true);
+                Controller.main.UpdateDexterityModifier(stats.dexterity, true);
+                Controller.main.UpdateStrengthModifier(stats.strength, true);
+                Controller.main.UpdateWisdomModifier(stats.wisdom, true);
             }
             if (equipmentType == Pet.petString)
             {
@@ -125,10 +130,14 @@ public class EquipmentSlot : MonoBehaviour
 
         // var item = GetComponent<Slot>().slotsItem;
         Debug.Log($"Unequipping item with stats: {stats}");
-        Controller.main.UpdateConstitutionModifier(-stats.constitution);
-        Controller.main.UpdateDexterityModifier(-stats.dexterity);
-        Controller.main.UpdateStrengthModifier(-stats.strength);
-        Controller.main.UpdateWisdomModifier(-stats.wisdom);
+        if (stats == null)
+        {
+            Debug.Log("what the fuck");
+        }
+        Controller.main.UpdateConstitutionModifier(-stats.constitution, true);
+        Controller.main.UpdateDexterityModifier(-stats.dexterity, true);
+        Controller.main.UpdateStrengthModifier(-stats.strength, true);
+        Controller.main.UpdateWisdomModifier(-stats.wisdom, true);
         // foreach (EqippableItem eqippableItem in possibleEqips)
         // {
         //     if (eqippableItem.ItemID == searchID)
