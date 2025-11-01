@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -203,6 +202,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -245,7 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 128973b1064ce4c2c867b6f030fab7a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenuSceneName: IntroAnimation
+  mainMenuSceneName: Real Level copy
   transistionScriptableObject: {fileID: 11400000, guid: 04359389d16cf4c02a42ba37afda5d5a, type: 2}
   panel: {fileID: 898198653}
   StartPlayScene: Level 0
@@ -474,6 +474,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &140422574
 GameObject:
   m_ObjectHideFlags: 0
