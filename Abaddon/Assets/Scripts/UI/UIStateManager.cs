@@ -96,6 +96,13 @@ public class UIStateManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            print("Skipping to next enemy");
+            Controller.main.done_with_tick = true;
+            Controller.main.enabled = true;
+        }
+
         bool ran_close_on_esc = false;
         screens.ForEach(screen =>
         {

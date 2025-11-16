@@ -19,6 +19,11 @@ public class WeepingEyeAttack : BaseAttack
     [HideInInspector]
     public AttackStage attackStage = AttackStage.WindUp;
 
+    public void Start()
+    {
+        Destroy(gameObject);
+    }
+
     public override bool WillAttack(Vector2 position, Vector2 direction)
     {
         // we check in a line for the weeping eye, but it's longer than the one provided
